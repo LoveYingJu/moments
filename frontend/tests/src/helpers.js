@@ -117,3 +117,138 @@ export function checkStore(key) {
         return null
 
 }
+
+
+
+
+
+
+
+// my own function
+
+
+
+export function change_to_login(){
+    const login_form = document.getElementById('login-form');
+    const register_form = document.getElementById('register-form');
+    login_form.style.display = 'block';
+    register_form.style.display = 'none';
+}
+
+export function change_to_register(){
+    var login_form = document.getElementById('login-form');
+    var register_form = document.getElementById('register-form');
+    login_form.style.display = 'none';
+    register_form.style.display = 'block';
+}
+
+
+
+export function change_to_homepage() {
+    const username = document.getElementById('username_login').value;
+    const password = document.getElementById('password_login').value;
+    postData('http://127.0.0.1:5000/auth/login',
+        {
+            'username': `${username}`,
+            'password': `${password}`
+        }, 0)
+        .then(token => already_login(token))// JSON from `response.json()` call
+        .catch(error => errorlogin(error))
+}
+
+
+export function register_function() {
+    const username = document.getElementById('username_re').value;
+    const password = document.getElementById('password_re').value;
+    const email = document.getElementById('email_re').value;
+    const name = document.getElementById('name_re').value;
+
+    postData('http://127.0.0.1:5000/auth/signup',
+        {
+            'username': `${username}`,
+            'password': `${password}`,
+            'email': `${email}`,
+            'name': `${name}`
+        }, 1)
+        .then(data => console.log(data))// JSON from `response.json()` call
+        .catch(error => errorregister(error))
+}
+
+
+
+// helper function
+
+function postData(url, data, flag) {
+    // Default options are marked with *
+    return fetch(url, {
+        body: JSON.stringify(data), // must match 'Content-Type' header
+
+        //credentials: 'same-origin', // include, same-origin, *omit
+
+        headers: {
+            'Content-Type': 'application/json'
+        },
+
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    })
+        .then((response) => {
+            if (response.ok && flag == 1) {
+                const register_submit = document.getElementById('register_error');
+                register_submit.removeChild(register_submit.lastChild);
+                register_submit.appendChild(createElement('p', 'Register Successful, please return to login'));
+                return response;
+            }
+            else if (response.ok && flag == 0)
+            {
+                return response;
+            }
+            else {
+                if (response.status == 403 && flag == 0){
+                    throw new Error ('Invalid Username/Password');
+                }
+                else if (response.status == 400 && flag == 0){
+                    throw new Error ('Missing Username/Password');
+                }
+                else if (response.status == 400 && flag == 1){
+                    throw new Error ('Malformed Request');
+                }
+                else if (response.status == 409 && flag == 1){
+                    throw new Error ('Username Taken');
+                }
+            }
+        })
+        .then(response => response.json())
+    // parses response to JSON
+}
+
+
+function errorlogin(error) {
+    const login_submit = document.getElementById('login_error');
+    login_submit.removeChild(login_submit.lastChild);
+    login_submit.appendChild(createElement('p', error));
+}
+
+function errorregister(error) {
+    const register_submit = document.getElementById('register_error');
+    register_submit.removeChild(register_submit.lastChild);
+    register_submit.appendChild(createElement('p', error));
+}
+
+
+function already_login(token) {
+    const container =  document.getElementById('container');
+    container.style.display = 'none';
+    const large_feed =  document.getElementById('large-feed');
+    large_feed.style.display = 'none';
+    console.log(token);
+
+
+
+
+
+
+
+
+
+
+}

@@ -19,8 +19,21 @@ fetch('http://localhost:8080/data/users.json')
 // let heading = document.createElement('h1');
 // heading.innerText = 'login';
 // document.getElementById('large-feed').appendChild(heading);
+const container = document.getElementById('container');
+//container.style.display = 'none';
 
+const large_feed = document.getElementById('large-feed');
+//large_feed.style.display = 'none';
 
+function change_to_login(){
+    var login_form = document.getElementById('login-form');
+    var register_form = document.getElementById('register-form');
+    login_form.style.display = 'block';
+    register_form.style.display = 'none';
+}
+
+const login = document.getElementById('login-form-link');
+login.addEventListener('click', change_to_login);
 
 
 feed

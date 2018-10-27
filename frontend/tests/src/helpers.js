@@ -34,13 +34,47 @@ export function createElement(tag, data, options = {}) {
  * @param   {object}        post 
  * @returns {HTMLElement}
  */
+
+
+// my helper function
+
+function how_many_likes(array) {
+    if (array.length === 0){
+        return;
+    }
+    else{
+        return `There are ${array.length} likes right now`;
+    }
+}
+
+function how_many_comments(array) {
+    if (array.length === 0){
+        return;
+    }
+    else{
+        return `There are ${array.length} comments right now`;
+    }
+}
+
+// helper fuction ends
+
 export function createPostTile(post) {
     const section = createElement('section', null, { class: 'post' });
 
     section.appendChild(createElement('h2', post.meta.author, { class: 'post-title' }));
 
-    section.appendChild(createElement('img', null, 
+    section.appendChild(createElement('img', null,
         { src: '/images/'+post.src, alt: post.meta.description_text, class: 'post-image' }));
+
+
+    section.appendChild(createElement('h2', post.meta.description_text, { class: 'post-published' }));
+
+    section.appendChild(createElement('h2', how_many_likes(post.meta.likes), { class: 'post-published' }));
+
+    section.appendChild(createElement('h2', how_many_comments(post.meta.comments), { class: 'post-published' }));
+
+    section.appendChild(createElement('h2', post.meta.published, { class: 'post-published' }));
+
 
     return section;
 }
